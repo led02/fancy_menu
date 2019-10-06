@@ -4,18 +4,28 @@ Fancy menu for your card10 badge
 This app implements a fancy menu with icon support for your card10 badge.
 
 
-Usage as app
+Installation
 ------------
 
-Simply copy the `menu` folder to your card10 `/apps` directory.
+Use the `util/install_menu.sh` to install the menu on your card10. You should
+pass the path to the root directory of your mounted watch. If you want to install
+it as application, append `-app` to the call:
+
+    $ cd util
+    
+    # Install as default menu:
+    $ ./install_menu.sh $CARD10_ROOT
+    
+    # Install as app:
+    $ ./install_menu.sh $CARD10_ROOT -app
 
 
-Usage as default menu
----------------------
+Configuration
+-------------
 
-- Replace `menu.py` on your card10 with `menu/__init__.py`.
-- Copy all `*.icx` files from the `menu` folder to your card10 root. Instead of
-  manually copying the files, you can also run `install_icons.sh` (see below).
+You can put a `menu.json` in your root folder. Here you can define values for
+background color (`bg`) and text color (`fg`). Both should be hexadecimal values
+without leading `0x` in RGB order.
 
 
 Add icons to your apps
@@ -45,5 +55,4 @@ Technical dept
 - Image loading is slow - due to alpha corrections? However, there is only enough
   memory for max three icons 48x48. Sometimes, if the GC is to slow, even an image
   might be dropped. (Handled graceful.)
-- Enable configuration of foreground / background color.
 - Enable tapping interface using BMA400 sensor.
