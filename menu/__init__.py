@@ -6,6 +6,7 @@ import ujson
 import utime
 
 import buttons
+import color
 import display
 
 
@@ -109,8 +110,14 @@ class Icon:
                 icx_data = Icon._read_icx(icx, bg)
 
         except OSError:
-            with open('/apps/menu/{}'.format(filename), 'rb') as icx:
-                icx_data = Icon._read_icx(icx, bg)
+            print("{} not found. Trying fallback...".format(filename))
+
+            try:
+               with open('/apps/menu/{}'.format(filename), 'rb') as icx:
+                   icx_data = Icon._read_icx(icx, bg)
+            except OSError as e:
+                sys.print_exception(e)
+                return None
 
         except MemoryError:
             return None
@@ -172,9 +179,7 @@ class App:
                 if 'name' not in info:
                     info['name'] = f
 
-                if 'icon' in info:
-                    info['icon'] = '/apps/{}/{}'.format(f, info['icon'])
-                else:
+                if 'icon' not in info:
                     # Check if icon is present.
                     try:
                         fp = open('/apps/{}/icon.icx'.format(f), 'rb')
@@ -337,7 +342,22 @@ class Menu:
 
 
 def main():
-    menu = Menu()
+    kwargs = {}
+
+    try:
+        with open("/menu.json", 'r') as config:
+            settings = ujson.load(config)
+
+        for key in ('fg', 'bg'):
+            try:
+                kwargs[key] = color.from_hex(int(settings[key], 16))
+            except (KeyError, ValueError) as e:
+                sys.print_exception(e)
+
+    except OSError as e:
+        sys.print_exception(e)
+
+    menu = Menu(**kwargs)
     menu.run()
 
 
