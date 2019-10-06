@@ -17,9 +17,10 @@ do
 done
 
 echo "Installing default icons..."
-cp home.png.icx $CARD10_ROOT/home.icx
+cp app.png.icx $CARD10_ROOT/app.icx
 cp py.png.icx $CARD10_ROOT/py.icx
 cp l0adable.png.icx $CARD10_ROOT/l0adable.icx
+cp home.png.icx $CARD10_ROOT/home.icx
 
 for icx in *.icx
 do
